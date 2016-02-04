@@ -25,7 +25,7 @@ public class SignIn {
     private static BufferedReader reader;
     private static int err_login, err_password;
 
-    private static FileInputStream fis;
+    private static InputStream fis;
     private static Properties property = new Properties();
     private static String host, port;
 
@@ -193,7 +193,7 @@ public class SignIn {
 
     private static void loadProperty() {
         try {
-            fis = new FileInputStream("src/main/resources/config_client.properties");
+            fis = SignIn.class.getResourceAsStream("/config_client.properties");
             property.load(fis);
 
             host = property.getProperty("s.host");
