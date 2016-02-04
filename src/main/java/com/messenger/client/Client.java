@@ -29,7 +29,7 @@ public class Client {
     private static String text = "";
     private static DateTimeFormatter dateTimeFormatter;
 
-    private static FileInputStream fis;
+    private static InputStream fis;
     private static Properties property = new Properties();
     private static String host, port, editorPane, work, format;
 
@@ -133,7 +133,7 @@ public class Client {
 
     private static void loadProperty() {
         try {
-            fis = new FileInputStream("src/main/resources/config_client.properties");
+            fis = Client.class.getResourceAsStream("/config_client.properties");
             property.load(fis);
 
             host = property.getProperty("s.host");
