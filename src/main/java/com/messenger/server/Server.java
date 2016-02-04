@@ -23,7 +23,7 @@ public class Server {
     private static Statement statement;
     private static int errorInStage_createField = 0;
     private static int id;
-    private static FileInputStream fis;
+    private static InputStream fis;
     private static Properties property = new Properties();
 
     private static String host;
@@ -209,7 +209,7 @@ public class Server {
 
     private static void loadProperty(){
         try {
-            fis = new FileInputStream("src/main/resources/config_server.properties");
+            fis = Server.class.getResourceAsStream("/config_server.properties");
             property.load(fis);
 
             host = property.getProperty("db.host");
