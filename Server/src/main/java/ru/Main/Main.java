@@ -1,17 +1,20 @@
-package com.messenger.server;
+package ru.Main;
 
 /**
  * Created by alex on 10.01.16.
  */
+
+import org.apache.log4j.Logger;
 
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Properties;
 
-public class Server {
+public class Main {
 
     private static Socket socket0;
     private static Socket socket1;
@@ -23,8 +26,6 @@ public class Server {
     private static Statement statement;
     private static int errorInStage_createField = 0;
     private static int id;
-    private static InputStream fis;
-    private static Properties property = new Properties();
 
     private static String host;
     private static String login;
@@ -32,20 +33,22 @@ public class Server {
     private static String port_login;
     private static String port_messages;
 
-    private Server() {
-        System.out.println("Loading property file...");
-        loadProperty();
-        System.out.println("Connection to database...");
+    static Logger logger = Logger.getLogger(Main.class.getName());
+
+    Main() {
+        logger.info("Loading property file...");
+        loadProperty(Main.class.getResourceAsStream("/config_server.properties"));
+        logger.info("Connection to database...");
         connectionToDatabase(host, login, password);
-        System.out.println("Creating port for user login...");
+        logger.info("Creating port for user login...");
         createPort_login(port_login);
-        System.out.println("Creating port for messages...");
+        logger.info("Creating port for messages...");
         createPort_messages(port_messages);
-        System.out.println("The server started taking users...");
+        logger.info("The server started taking users...");
         while (true) {
-            System.out.println("> Wait user...");
+            logger.info("> Wait user...");
             waitUser();
-            System.out.println("> Creating/Searching user fields in the database...");
+            logger.info("> Creating/Searching user fields in the database...");
             while (errorInStage_createField != 2 && errorInStage_createField != 5) {
                 create_searchFieldInDatabase();
                 if (errorInStage_createField != 2 && errorInStage_createField != 5) {
@@ -53,18 +56,18 @@ public class Server {
                 }
             }
             if (errorInStage_createField != 5) {
-                System.out.println("> Add an output stream...");
+                logger.info("> Add an output stream...");
                 addOutputStream();
-                System.out.println("> Creating thread input/output stream for message that the user...");
+                logger.info("> Creating thread input/output stream for message that the user...");
                 addThreadForTheUser();
-                System.out.println("> --------------------------");
+                logger.info("> -------- Next -------->>");
             }
             errorInStage_createField = 0;
         }
     }
 
     public static void main(String[] args) {
-        getInstance();
+        new Main();
     }
 
     private static class checkMessageFromClient implements Runnable {
@@ -96,7 +99,7 @@ public class Server {
                             }
                         }
                     } else {
-                        java.util.Iterator<PrintWriter> it = streams.iterator();
+                        Iterator<PrintWriter> it = streams.iterator();
                         while (it.hasNext()) {
                             PrintWriter writer = it.next();
                             writer.println(newMessage);
@@ -115,7 +118,7 @@ public class Server {
             connection = DriverManager.getConnection(url, user, password);
             statement = connection.createStatement();
         } catch (SQLException e) {
-            System.out.println("-> " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -131,6 +134,7 @@ public class Server {
                 String fast_login = reader.readLine();
                 statement.execute("INSERT INTO `Users` (`login`, `password`) VALUES ('" + fast_login + "', '" + reader.readLine() + "');");
                 statement.execute("CREATE UNIQUE INDEX " + fast_login + " ON Users(login);");
+                logger.info("> Sign Up");
             } else {
                 String fast_login = reader.readLine();
                 ResultSet rs = statement.executeQuery("SELECT * FROM `Users` WHERE `login` LIKE \"" + fast_login + "\"");
@@ -138,11 +142,10 @@ public class Server {
                     errorInStage_createField = 4;
                 } else {
                     id = rs.getInt(1);
-                    //System.out.printf("id: %d, login: %s, password: %s %n", rs.getInt(1), rs.getString(2), rs.getString(3));
                     if (!rs.getString(3).equals(reader.readLine())) {
                         errorInStage_createField = 3;
                     }
-                    System.out.println("> Sign In");
+                    logger.info("> Sign In");
                 }
             }
         } catch (IOException e) {
@@ -153,17 +156,18 @@ public class Server {
                 try {
                     statement.execute("DELETE FROM `Users` WHERE id=LAST_INSERT_ID();");
                 } catch (SQLException e1) {
-                    System.out.println("-> " + e.getMessage());
+                    e.printStackTrace();
                 }
             } else {
-                System.out.println("-> " + e.getMessage());
+                e.printStackTrace();
             }
         } finally {
             if (errorInStage_createField == 0) {
                 errorInStage_createField = 2;
             }
-            if (errorInStage_createField != 5)
+            if (errorInStage_createField != 5) {
                 fast_writer.println(errorInStage_createField);
+            }
         }
     }
 
@@ -207,26 +211,19 @@ public class Server {
         t.start();
     }
 
-    private static void loadProperty(){
+    private static void loadProperty(InputStream inputStream) {
         try {
-            fis = Server.class.getResourceAsStream("/config_server.properties");
-            property.load(fis);
+            Properties properties = new Properties();
+            properties.load(inputStream);
 
-            host = property.getProperty("db.host");
-            login = property.getProperty("db.login");
-            password = property.getProperty("db.password");
-            port_login = property.getProperty("p.login");
-            port_messages = property.getProperty("p.messages");
+            host = properties.getProperty("db.host");
+            login = properties.getProperty("db.login");
+            password = properties.getProperty("db.password");
+            port_login = properties.getProperty("p.login");
+            port_messages = properties.getProperty("p.messages");
         } catch (IOException e) {
-            System.err.println("ERROR: Property file not exist!");
+            logger.error("Property file not exist!");
         }
     }
 
-    private static class SingletonHolder {
-        private static final Server INSTANCE = new Server();
-    }
-
-    public static Server getInstance() {
-        return SingletonHolder.INSTANCE;
-    }
 }
