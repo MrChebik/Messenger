@@ -1,0 +1,16 @@
+<server>
+    <info>
+        <loadProperty>Loading property file</loadProperty>
+        <connectionToDatabase>Connection to database</connectionToDatabase>
+        <createPorts>Creating ports for user login and messages</createPorts>
+        <start>The messenger.server started taking users</start>
+        <waitUser>Wait user</waitUser>
+        <create_searchFieldInDatabase>Creating/Searching user fields in the database</create_searchFieldInDatabase>
+        <addOutputStream>Add an output stream</addOutputStream>
+        <addThreadToTheUser>Creating input/output stream for message that the user</addThreadToTheUser>
+        <next>Next</next>
+    </info>
+    <error>
+        <loadProperty>The Properties file does not exist!</loadProperty>
+    </error>
+</server>

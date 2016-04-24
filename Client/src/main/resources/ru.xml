@@ -1,0 +1,34 @@
+<client>
+    <info>
+        <loadProperty>Загрузка файла свойтсв</loadProperty>
+        <createComponents>Создание компонентов</createComponents>
+        <settingFrame>Настройка окна</settingFrame>
+        <connect>Подключение</connect>
+        <thread>Поток, начинает ловить сообщения от сервера</thread>
+        <exit>Выход</exit>
+    </info>
+    <error>
+        <password>Неправильно введен пароль!</password>
+        <notExist>Пользователь с данным ником не зарегистрирован!</notExist>
+        <existLogin>Введенный логин уже используется!</existLogin>
+        <loadProperty>Файл свойств не существует!</loadProperty>
+        <error>Error</error>
+        <connect>В соединении отказано</connect>
+        <reason>Причины:</reason>
+        <reason1>- нет доступа к Интернету</reason1>
+        <reason2>- сервер отключен/недоступен</reason2>
+    </error>
+    <components>
+        <login>Логин</login>
+        <password>Пароль</password>
+        <signin>Ввойти</signin>
+        <signup>Зарегистрироваться</signup>
+        <send>Отправить</send>
+        <file>Файл</file>
+        <help>Помощь</help>
+        <about>О программе</about>
+        <version>Версия: 0.04</version>
+        <developer>Разработчик: MrChebik</developer>
+        <program>Чат</program>
+    </components>
+</client>

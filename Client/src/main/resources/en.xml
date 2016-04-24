@@ -1,0 +1,34 @@
+<client>
+    <info>
+        <loadProperty>Loading property file</loadProperty>
+        <createComponents>Creating components</createComponents>
+        <settingFrame>Setting frame</settingFrame>
+        <connect>Connecting</connect>
+        <thread>Thread begin to catch message from the server</thread>
+        <exit>Exit</exit>
+    </info>
+    <error>
+        <password>Incorrect password!</password>
+        <notExist>The user with the given nickname is not registered!</notExist>
+        <existLogin>The entered login is already used!</existLogin>
+        <loadProperty>Property file not exist!</loadProperty>
+        <error>Error</error>
+        <connect>Connection refused</connect>
+        <reason>Reasons:</reason>
+        <reason1>- no access to the Internet</reason1>
+        <reason2>- the server is offline/unavailable</reason2>
+    </error>
+    <components>
+        <login>Login</login>
+        <password>Password</password>
+        <signin>Sign in</signin>
+        <signup>Sign up</signup>
+        <send>Send</send>
+        <file>File</file>
+        <help>Help</help>
+        <about>About</about>
+        <version>Version: 0.04</version>
+        <developer>Developer: MrChebik</developer>
+        <program>Messenger</program>
+    </components>
+</client>
