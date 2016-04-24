@@ -1,10 +1,11 @@
 # Messenger
 Messenger on Java. The technology used:
 - AWT
-- Sockets
-- MySQL
-- Swing
 - Log4j
+- Maven
+- MySQL
+- Sockets
+- Swing
 - XML
 
 In the RELEASE - it's like how usually chat.
