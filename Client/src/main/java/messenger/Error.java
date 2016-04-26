@@ -1,5 +1,5 @@
 /**
- * Copyright 2015, 2016 Alexander Beschasny
+ * Copyright 2016 Alexander Beschasny
  *
  * Messenger is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,7 +25,8 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Created by alex on 15.01.16.
+ * @version 0.04
+ * @author mrchebik
  */
 public class Error extends JFrame {
 

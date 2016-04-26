@@ -1,0 +1,64 @@
+«+» added functionality
+«*» changes, that do not affect the end user
+«-» bugfixes
+----------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------
+v0.01
+  Start
+----------------------------------------------------------------------------------------------------------------------
+v0.02
+Client:
++ Sign up
++ Check for spaces in login and password
++ Sending message to the server about user access => removes the listener
++ In chat-added time to send the message
+- At the beginning of the run is checked the connection to the server
+Server:
+* Messages about the stage of work
+* Database - MySQL
+* Separate socket for messages and a login/user sign up
+----------------------------------------------------------------------------------------------------------------------
+v0.03
+* Attached file for properties
+Client:
++ If the login/password contains illegal characters and/or length of the login/password is less than 3/4 and more 12/16,
+  the boundary components is highlighted red + impossible to click on button Sign in/Sign up
+- If you have incorrectly entered the password, clears the password field only
+- The password field shows dots instead of characters
+* Zoomed-in window of Sign in
+* Use JEditorPane instead of JTextArea => supported modification of the text
+  You can change the font, color, etc. using HTML code
+Server:
+* Modified release, during Sign in
+----------------------------------------------------------------------------------------------------------------------
+v0.04
++ Log4j
+  The placement of the log in the folder where you launched the project
++ Languages - en/ru
+  Ask Russian language for the client:
+  $ java -jar client-0.04.jar ru
+* The modules in the project
+----------------------------------------------------------------------------------------------------------------------
+v0.05
++ The English version of the release notes
++ Time for logging
+- Logging in the console removed
+  The whole log can be found in the file
+  - logClient.out
+  - logServer.out
+Client:
++ The ability to switch between languages
+* Spelling correction
+* Instead of a button to Register -> Registration
+* Increased window length
+- Removed ":" after Username/Password
+Server:
++ The server doesn't crashes if the client, during the Windows "login" will be released not through the "cross"
++ Create a new thread that waits for the user if the "main" stream, the receiving user is busy
++ Starting with the Russian language:
+  $ java -jar server-0.05.jar ru
++ Commands
+  -help - for reference
+  Until that denote commands in Russian
+* Refactoring
+----------------------------------------------------------------------------------------------------------------------

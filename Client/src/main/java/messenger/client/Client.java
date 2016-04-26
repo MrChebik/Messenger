@@ -1,5 +1,5 @@
 /**
- * Copyright 2015, 2016 Alexander Beschasny
+ * Copyright 2016 Alexander Beschasny
  *
  * Messenger is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,9 +35,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.Properties;
 
 /**
- * Created by alex on 12.01.16.
+ * @version 0.04
+ * @author mrchebik
  */
-
 public class Client {
 
     private static String messageFromClient = "";
@@ -72,13 +72,13 @@ public class Client {
         dialogs.setContentType(editorPane);
         dialogs.setEditable(false);
         dialogs.addKeyListener(new KeyListener());
-        dialogs.setBounds(15, 15, 340, 140);
+        dialogs.setBounds(15, 15, 370, 140);
         DefaultCaret caret = (DefaultCaret) dialogs.getCaret();
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
         JScrollPane scrollPane = new JScrollPane(dialogs);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        scrollPane.setBounds(15, 15, 340, 140);
+        scrollPane.setBounds(15, 15, 370, 140);
         frame.add(scrollPane);
 
         message.addKeyListener(new KeyListener());
@@ -87,7 +87,7 @@ public class Client {
         frame.add(message);
 
         JButton send = new JButton(Parser.getSend());
-        send.setSize(89, 18);
+        send.setSize(119, 18);
         send.setLocation(265, 155);
         send.addActionListener(e -> sendMessage());
         frame.add(send);
@@ -106,7 +106,7 @@ public class Client {
 
         logger.info(Parser.getSettingFrame() + "...");
         frame.setTitle(Parser.getProgram());
-        frame.setSize(374, 235);
+        frame.setSize(404, 235);
         frame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 writer.println("$exit$");

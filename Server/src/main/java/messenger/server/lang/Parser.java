@@ -1,5 +1,5 @@
 /**
- * Copyright 2015, 2016 Alexander Beschasny
+ * Copyright 2016 Alexander Beschasny
  *
  * Messenger is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,12 +29,12 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 /**
- * Created by alex on 24.04.16.
+ * @version 0.05
+ * @author mrchebik
  */
-
 public class Parser {
 
-    private static String loadProperty, loadProperty_err, connectionToDatabasese, createPorts, start, waitUser, create_searchFieldInDatabase, addOutputStream, addThreadToTheUser, next;
+    private static String loadProperty, loadProperty_err, connectionToDatabasese, createPorts, start, waitUser, create_searchFieldInDatabase, addOutputStream, addThreadToTheUser, next, nextUser, console, nullPointer, threadStop, threadStart;
 
     public Parser(String lang) {
         try {
@@ -55,11 +55,16 @@ public class Parser {
             setAddOutputStream(eElementListInfo.getElementsByTagName("addOutputStream").item(0).getTextContent());
             setAddThreadToTheUser(eElementListInfo.getElementsByTagName("addThreadToTheUser").item(0).getTextContent());
             setNext(eElementListInfo.getElementsByTagName("next").item(0).getTextContent());
+            setNextUser(eElementListInfo.getElementsByTagName("waitNext").item(0).getTextContent());
+            setConsole(eElementListInfo.getElementsByTagName("console").item(0).getTextContent());
+            setThreadStop(eElementListInfo.getElementsByTagName("threadStop").item(0).getTextContent());
+            setThreadStart(eElementListInfo.getElementsByTagName("threadStart").item(0).getTextContent());
 
             NodeList listError = doc.getElementsByTagName("error");
             Node nodeListError = listError.item(0);
             Element eElementListError = (Element) nodeListError;
             setLoadProperty_err(eElementListError.getElementsByTagName("loadProperty").item(0).getTextContent());
+            setNullPointer(eElementListError.getElementsByTagName("nullPointer").item(0).getTextContent());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -143,5 +148,45 @@ public class Parser {
 
     public static void setLoadProperty_err(String loadProperty_err) {
         Parser.loadProperty_err = loadProperty_err;
+    }
+
+    public static String getNextUser() {
+        return nextUser;
+    }
+
+    public static void setNextUser(String nextUser) {
+        Parser.nextUser = nextUser;
+    }
+
+    public static String getConsole() {
+        return console;
+    }
+
+    public static void setConsole(String console) {
+        Parser.console = console;
+    }
+
+    public static String getNullPointer() {
+        return nullPointer;
+    }
+
+    public static void setNullPointer(String nullPointer) {
+        Parser.nullPointer = nullPointer;
+    }
+
+    public static String getThreadStop() {
+        return threadStop;
+    }
+
+    public static void setThreadStop(String threadStop) {
+        Parser.threadStop = threadStop;
+    }
+
+    public static String getThreadStart() {
+        return threadStart;
+    }
+
+    public static void setThreadStart(String threadStart) {
+        Parser.threadStart = threadStart;
     }
 }

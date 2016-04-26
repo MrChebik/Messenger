@@ -5,7 +5,7 @@
     <parent>
         <artifactId>messenger</artifactId>
         <groupId>messenger</groupId>
-        <version>0.04</version>
+        <version>0.05</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 

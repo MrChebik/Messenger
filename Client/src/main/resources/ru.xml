@@ -1,6 +1,6 @@
 <client>
     <info>
-        <loadProperty>Загрузка файла свойтсв</loadProperty>
+        <loadProperty>Загрузка файла свойcтв</loadProperty>
         <createComponents>Создание компонентов</createComponents>
         <settingFrame>Настройка окна</settingFrame>
         <connect>Подключение</connect>
@@ -21,8 +21,8 @@
     <components>
         <login>Логин</login>
         <password>Пароль</password>
-        <signin>Ввойти</signin>
-        <signup>Зарегистрироваться</signup>
+        <signin>Войти</signin>
+        <signup>Регистрация</signup>
         <send>Отправить</send>
         <file>Файл</file>
         <help>Помощь</help>

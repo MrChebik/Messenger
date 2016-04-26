@@ -1,5 +1,5 @@
 /**
- * Copyright 2015, 2016 Alexander Beschasny
+ * Copyright 2016 Alexander Beschasny
  *
  * Messenger is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,7 +23,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 /**
- * Created by alex on 14.01.16.
+ * @version 0.01
+ * @author mrchebik
  */
 public class KeyListener extends KeyAdapter {
     public void keyReleased(KeyEvent e) {

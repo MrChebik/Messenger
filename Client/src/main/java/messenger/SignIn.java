@@ -1,5 +1,5 @@
 /**
- * Copyright 2015, 2016 Alexander Beschasny
+ * Copyright 2016 Alexander Beschasny
  *
  * Messenger is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,9 +32,9 @@ import java.net.Socket;
 import java.util.Properties;
 
 /**
- * Created by alex on 12.01.16.
+ * @version 0.05
+ * @author mrchebik
  */
-
 public class SignIn {
 
     private static JFrame frame = new JFrame();
@@ -57,6 +57,8 @@ public class SignIn {
     public static String getPassword() {
         return password.getText();
     }
+
+    static JLabel inputName, inputPassword;
 
     Timer time = new Timer(50, e -> {
         err_login = 0;
@@ -107,6 +109,8 @@ public class SignIn {
     });
 
     public static void main(String[] args) {
+        logger.info("-------- New Instance -------->>");
+        logger.info("Parsing language file...");
         if (args.length > 0) {
             if (args[0].equals("ru")) {
                 new Parser("ru");
@@ -123,7 +127,17 @@ public class SignIn {
         logger.info(Parser.getLoadProperty() + "...");
         loadProperty(SignIn.class.getResourceAsStream("/config_client.properties"));
         logger.info(Parser.getCreateComponents() + "...");
-        JLabel inputName = new JLabel(Parser.getLogin() + ":");
+        JButton en_ru = new JButton("en/ru");
+        en_ru.setMargin(new Insets(-40, -41, -38, -40));
+        en_ru.setSize(37, 16);
+        en_ru.setLocation(16, 5);
+        en_ru.addActionListener(e -> {
+            Parser.changeLang();
+            renameComp();
+        });
+        frame.add(en_ru);
+
+        inputName = new JLabel(Parser.getLogin());
         inputName.setHorizontalAlignment(SwingConstants.CENTER);
         inputName.setVerticalAlignment(SwingConstants.CENTER);
         inputName.setBounds(0, 0, 170, 24);
@@ -135,7 +149,7 @@ public class SignIn {
         login.setBorder(BorderFactory.createLineBorder(Color.decode("#808080"), 1));
         frame.add(login);
 
-        JLabel inputPassword = new JLabel(Parser.getPassword0() + ":");
+        inputPassword = new JLabel(Parser.getPassword0());
         inputPassword.setHorizontalAlignment(SwingConstants.CENTER);
         inputPassword.setVerticalAlignment(SwingConstants.CENTER);
         inputPassword.setBounds(0, 45, 170, 24);
@@ -191,6 +205,13 @@ public class SignIn {
         }
         logger.info(Parser.getThread() + "...");
         t.start();
+    }
+
+    private void renameComp() {
+        inputName.setText(Parser.getLogin());
+        inputPassword.setText(Parser.getPassword0());
+        signIn.setText(Parser.getSignin());
+        signUp.setText(Parser.getSignup());
     }
 
     public static class checkMessageFromServer implements Runnable {

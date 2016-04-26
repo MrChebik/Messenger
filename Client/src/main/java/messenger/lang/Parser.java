@@ -1,3 +1,22 @@
+/**
+ * Copyright 2016 Alexander Beschasny
+ * <p>
+ * Messenger is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * <p>
+ * Messenger is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with Messenger.  If not, see <http://www.gnu.org/licenses/gpl-3.0.txt>.
+ * <p>
+ * Alexander Beschasny mrchebik@yandex.ru
+ */
+
 package messenger.lang;
 
 import messenger.SignIn;
@@ -5,65 +24,85 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
 
 /**
- * Created by alex on 24.04.16.
+ * @version 0.05
+ * @author mrchebik
  */
 
 public class Parser {
 
     private static String loadProperty, createComponents, settingFrame, connect, thread, exit, password, notExist, existLogin, loadProperty_err, error, connect0, login, password0, signin, signup, send, file, help, about, version, developer, program, reason, reason1, reason2;
 
+    public static String language;
+
     public Parser(String lang) {
+        doSomething(lang);
+    }
+
+    private static void doSomething(String lang) {
+        language = lang;
+
+        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder dBuilder = null;
         try {
-            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-            Document doc = dBuilder.parse(String.valueOf(SignIn.class.getResource("/" + lang + ".xml")));
-            doc.getDocumentElement().normalize();
-            NodeList listInfo = doc.getElementsByTagName("info");
-            Node nodeListInfo = listInfo.item(0);
-            Element eElementListInfo = (Element) nodeListInfo;
-
-            setLoadProperty(eElementListInfo.getElementsByTagName("loadProperty").item(0).getTextContent());
-            setCreateComponents(eElementListInfo.getElementsByTagName("createComponents").item(0).getTextContent());
-            setSettingFrame(eElementListInfo.getElementsByTagName("settingFrame").item(0).getTextContent());
-            setConnect(eElementListInfo.getElementsByTagName("connect").item(0).getTextContent());
-            setThread(eElementListInfo.getElementsByTagName("thread").item(0).getTextContent());
-            setExit(eElementListInfo.getElementsByTagName("exit").item(0).getTextContent());
-
-            NodeList listError = doc.getElementsByTagName("error");
-            Node nodeListError = listError.item(0);
-            Element eElementListError = (Element) nodeListError;
-            setPassword(eElementListError.getElementsByTagName("password").item(0).getTextContent());
-            setNotExist(eElementListError.getElementsByTagName("notExist").item(0).getTextContent());
-            setExistLogin(eElementListError.getElementsByTagName("existLogin").item(0).getTextContent());
-            setLoadProperty_err(eElementListError.getElementsByTagName("loadProperty").item(0).getTextContent());
-            setError(eElementListError.getElementsByTagName("error").item(0).getTextContent());
-            setConnect0(eElementListError.getElementsByTagName("connect").item(0).getTextContent());
-            setReason(eElementListError.getElementsByTagName("reason").item(0).getTextContent());
-            setReason1(eElementListError.getElementsByTagName("reason1").item(0).getTextContent());
-            setReason2(eElementListError.getElementsByTagName("reason2").item(0).getTextContent());
-
-            NodeList listComponents = doc.getElementsByTagName("components");
-            Node nodeListComponents = listComponents.item(0);
-            Element eElementListComponents = (Element) nodeListComponents;
-            setLogin(eElementListComponents.getElementsByTagName("login").item(0).getTextContent());
-            setPassword0(eElementListComponents.getElementsByTagName("password").item(0).getTextContent());
-            setSignin(eElementListComponents.getElementsByTagName("signin").item(0).getTextContent());
-            setSignup(eElementListComponents.getElementsByTagName("signup").item(0).getTextContent());
-            setSend(eElementListComponents.getElementsByTagName("send").item(0).getTextContent());
-            setFile(eElementListComponents.getElementsByTagName("file").item(0).getTextContent());
-            setHelp(eElementListComponents.getElementsByTagName("help").item(0).getTextContent());
-            setAbout(eElementListComponents.getElementsByTagName("about").item(0).getTextContent());
-            setVersion(eElementListComponents.getElementsByTagName("version").item(0).getTextContent());
-            setDeveloper(eElementListComponents.getElementsByTagName("developer").item(0).getTextContent());
-            setProgram(eElementListComponents.getElementsByTagName("program").item(0).getTextContent());
-        } catch (Exception e) {
+            dBuilder = dbFactory.newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
             e.printStackTrace();
         }
+        Document doc = null;
+        try {
+            doc = dBuilder.parse(String.valueOf(SignIn.class.getResource("/" + lang + ".xml")));
+        } catch (SAXException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        doc.getDocumentElement().normalize();
+        NodeList listInfo = doc.getElementsByTagName("info");
+        Node nodeListInfo = listInfo.item(0);
+        Element eElementListInfo = (Element) nodeListInfo;
+
+        setLoadProperty(eElementListInfo.getElementsByTagName("loadProperty").item(0).getTextContent());
+        setCreateComponents(eElementListInfo.getElementsByTagName("createComponents").item(0).getTextContent());
+        setSettingFrame(eElementListInfo.getElementsByTagName("settingFrame").item(0).getTextContent());
+        setConnect(eElementListInfo.getElementsByTagName("connect").item(0).getTextContent());
+        setThread(eElementListInfo.getElementsByTagName("thread").item(0).getTextContent());
+        setExit(eElementListInfo.getElementsByTagName("exit").item(0).getTextContent());
+
+        NodeList listError = doc.getElementsByTagName("error");
+        Node nodeListError = listError.item(0);
+        Element eElementListError = (Element) nodeListError;
+        setPassword(eElementListError.getElementsByTagName("password").item(0).getTextContent());
+        setNotExist(eElementListError.getElementsByTagName("notExist").item(0).getTextContent());
+        setExistLogin(eElementListError.getElementsByTagName("existLogin").item(0).getTextContent());
+        setLoadProperty_err(eElementListError.getElementsByTagName("loadProperty").item(0).getTextContent());
+        setError(eElementListError.getElementsByTagName("error").item(0).getTextContent());
+        setConnect0(eElementListError.getElementsByTagName("connect").item(0).getTextContent());
+        setReason(eElementListError.getElementsByTagName("reason").item(0).getTextContent());
+        setReason1(eElementListError.getElementsByTagName("reason1").item(0).getTextContent());
+        setReason2(eElementListError.getElementsByTagName("reason2").item(0).getTextContent());
+
+        NodeList listComponents = doc.getElementsByTagName("components");
+        Node nodeListComponents = listComponents.item(0);
+        Element eElementListComponents = (Element) nodeListComponents;
+        setLogin(eElementListComponents.getElementsByTagName("login").item(0).getTextContent());
+        setPassword0(eElementListComponents.getElementsByTagName("password").item(0).getTextContent());
+        setSignin(eElementListComponents.getElementsByTagName("signin").item(0).getTextContent());
+        setSignup(eElementListComponents.getElementsByTagName("signup").item(0).getTextContent());
+        setSend(eElementListComponents.getElementsByTagName("send").item(0).getTextContent());
+        setFile(eElementListComponents.getElementsByTagName("file").item(0).getTextContent());
+        setHelp(eElementListComponents.getElementsByTagName("help").item(0).getTextContent());
+        setAbout(eElementListComponents.getElementsByTagName("about").item(0).getTextContent());
+        setVersion(eElementListComponents.getElementsByTagName("version").item(0).getTextContent());
+        setDeveloper(eElementListComponents.getElementsByTagName("developer").item(0).getTextContent());
+        setProgram(eElementListComponents.getElementsByTagName("program").item(0).getTextContent());
     }
 
     public static String getLoadProperty() {
@@ -274,4 +313,11 @@ public class Parser {
         Parser.reason2 = reason2;
     }
 
+    public static void changeLang() {
+        if (language.equals("en")) {
+            doSomething("ru");
+        } else {
+            doSomething("en");
+        }
+    }
 }

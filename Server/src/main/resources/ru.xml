@@ -9,8 +9,13 @@
         <addOutputStream>Добавление выходного потока</addOutputStream>
         <addThreadToTheUser>Создание входного/выходного потока для сообщений этого пользователя</addThreadToTheUser>
         <next>Следующий</next>
+        <waitNext>Ждет следующего пользователя</waitNext>
+        <console>Консоль запускается</console>
+        <threadStop>Поток завершается</threadStop>
+        <threadStart>Создание потока для Sign in</threadStart>
     </info>
     <error>
         <loadProperty>Файл свойств не существует!</loadProperty>
+        <nullPointer>Поток словил null значение</nullPointer>
     </error>
 </server>
