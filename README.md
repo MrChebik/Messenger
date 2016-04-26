@@ -15,10 +15,11 @@ In the RELEASE - it's like how usually chat.
 ## Execute
 ```
 mvn package (Client and Server moduls)
-java -jar server-0.04.jar
-java -jar client-0.04.jar
+java -jar server-0.05.jar
+java -jar client-0.05.jar
 ```
 If you want to change language on RU, you may to execute:
 ```
-java -jar client-0.04.jar ru
+java -jar client-0.05.jar ru
+java -jar server-0.05.jar ru
 ```
