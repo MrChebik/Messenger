@@ -13,7 +13,7 @@ Technologies, that are used:
 In the RELEASE - it's like how usually chat.
 
 ## Running
-**Without a working server, client won't be working.**
+**Without a running server, the client will not start**
 ```
 mvn package
 java -jar ~/Server/target/server-0.04.jar
