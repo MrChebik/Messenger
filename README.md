@@ -16,7 +16,7 @@ In the RELEASE - it's like how usually chat.
 **Without a running server, the client will not start**
 ```
 mvn package
-java -jar ~/Server/target/server-0.04.jar
-java -jar ~/Client/target/client-0.04.jar
+java -jar ~/Server/target/server-0.06.jar
+java -jar ~/Client/target/client-0.06.jar
 ```
 If you want to change language to RU, you can to execute with argument **_ru_**
