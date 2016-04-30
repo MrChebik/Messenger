@@ -1,5 +1,7 @@
 # Messenger
-Messenger on Java. The technology used:
+Messenger it's a program, who help you to communicate with others people who are in this program.
+
+Technologies, that are used:
 - AWT
 - Log4j
 - Maven
@@ -10,15 +12,11 @@ Messenger on Java. The technology used:
 
 In the RELEASE - it's like how usually chat.
 
+## Running
 **Without a working server, client won't be working.**
-
-## Execute
 ```
-mvn package (Client and Server moduls)
-java -jar server-0.04.jar
-java -jar client-0.04.jar
+mvn package
+java -jar ~/Server/target/server-0.04.jar
+java -jar ~/Client/target/client-0.04.jar
 ```
-If you want to change language on RU, you may to execute:
-```
-java -jar client-0.04.jar ru
-```
+If you want to change language to RU, you can to execute with argument **_ru_**
