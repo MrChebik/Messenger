@@ -5,7 +5,7 @@
     <parent>
         <artifactId>messenger</artifactId>
         <groupId>messenger</groupId>
-        <version>0.05</version>
+        <version>0.06</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -37,7 +37,7 @@
                             <transformers>
                                 <transformer
                                         implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>messenger.SignIn</mainClass>
+                                    <mainClass>messenger.Main</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>
@@ -53,7 +53,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>messenger.SignIn</mainClass>
+                            <mainClass>messenger.Main</mainClass>
                             <addClasspath>true</addClasspath>
                         </manifest>
                     </archive>

@@ -1,5 +1,7 @@
 /**
- * Copyright 2016 Alexander Beschasny
+ * Messenger it's a program, who help you to communicate with others people who are in this program.
+ * <p>
+ * Copyright (C) 2016 MrChebik
  * <p>
  * Messenger is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -12,12 +14,12 @@
  * GNU General Public License for more details.
  * <p>
  * You should have received a copy of the GNU General Public License
- * along with Messenger.  If not, see <http://www.gnu.org/licenses/gpl-3.0.txt>.
+ * along with Messenger.  If not, see <http://www.gnu.org/licenses/>.
  * <p>
  * Alexander Beschasny mrchebik@yandex.ru
  */
 
-package messenger.server;
+package messenger.server.runnable;
 
 import messenger.server.lang.Parser;
 import org.apache.log4j.Logger;
@@ -29,9 +31,9 @@ import static messenger.server.Main.*;
 
 /**
  * @version 0.05
- * @author mrchebik
+ * @author MrChebik
  */
-public class TakeUser extends Thread {
+public class TakeUser implements Runnable {
 
     private static Socket socket;
     private static PrintWriter printWriter;
@@ -41,7 +43,7 @@ public class TakeUser extends Thread {
     @Override
     public void run() {
         logger.info(Parser.getWaitUser() + "...");
-        socket = waitUser(socket);
+        socket = waitUser();
 
         logger.info(Parser.getThreadStart() + "...");
         newThreadTU();
@@ -49,16 +51,8 @@ public class TakeUser extends Thread {
         int errors = 0;
 
         while (errors != 2 && errors != 5) {
-            try {
-                logger.info(Parser.getCreate_searchFieldInDatabase() + "...");
-                errors = signInUp(socket, errors, printWriter);
-            } catch (NullPointerException e) {
-                logger.error(Parser.getNullPointer() + "...");
-                interrupt();
-                if (!interrupted()) {
-                    stop();
-                }
-            }
+            logger.info(Parser.getCreate_searchFieldInDatabase() + "...");
+            errors = signInUp(socket, printWriter);
             if (errors != 2 && errors != 5) {
                 errors = 0;
             }
@@ -71,9 +65,5 @@ public class TakeUser extends Thread {
         }
 
         logger.info(Parser.getThreadStop() + "...");
-        interrupt();
-        if (!interrupted()) {
-            stop();
-        }
     }
 }

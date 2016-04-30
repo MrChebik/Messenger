@@ -1,5 +1,7 @@
 /**
- * Copyright 2016 Alexander Beschasny
+ * Messenger it's a program, who help you to communicate with others people who are in this program.
+ * <p>
+ * Copyright (C) 2016 MrChebik
  * <p>
  * Messenger is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -12,14 +14,14 @@
  * GNU General Public License for more details.
  * <p>
  * You should have received a copy of the GNU General Public License
- * along with Messenger.  If not, see <http://www.gnu.org/licenses/gpl-3.0.txt>.
+ * along with Messenger.  If not, see <http://www.gnu.org/licenses/>.
  * <p>
  * Alexander Beschasny mrchebik@yandex.ru
  */
 
 package messenger.lang;
 
-import messenger.SignIn;
+import messenger.signin.SignIn;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -32,13 +34,13 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 
 /**
- * @version 0.05
- * @author mrchebik
+ * @version 0.06
+ * @author MrChebik
  */
 
 public class Parser {
 
-    private static String loadProperty, createComponents, settingFrame, connect, thread, exit, password, notExist, existLogin, loadProperty_err, error, connect0, login, password0, signin, signup, send, file, help, about, version, developer, program, reason, reason1, reason2;
+    private static String loadProperty, createComponents, settingFrame, connect, thread, exit, password, notExist, existLogin, loadProperty_err, error, connect0, login, password0, signin, signup, send, file, help, about, version, developer, program, reason, reason1, reason2, settings, languages, chat, search;
 
     public static String language;
 
@@ -103,6 +105,10 @@ public class Parser {
         setVersion(eElementListComponents.getElementsByTagName("version").item(0).getTextContent());
         setDeveloper(eElementListComponents.getElementsByTagName("developer").item(0).getTextContent());
         setProgram(eElementListComponents.getElementsByTagName("program").item(0).getTextContent());
+        setSettings(eElementListComponents.getElementsByTagName("settings").item(0).getTextContent());
+        setLanguages(eElementListComponents.getElementsByTagName("languages").item(0).getTextContent());
+        setChat(eElementListComponents.getElementsByTagName("chat").item(0).getTextContent());
+        setSearch(eElementListComponents.getElementsByTagName("search").item(0).getTextContent());
     }
 
     public static String getLoadProperty() {
@@ -319,5 +325,45 @@ public class Parser {
         } else {
             doSomething("en");
         }
+    }
+
+    public static void ru() {
+        doSomething("ru");
+    }
+
+    public static void en() {
+        doSomething("en");
+    }
+
+    public static String getSettings() {
+        return settings;
+    }
+
+    public static void setSettings(String settings) {
+        Parser.settings = settings;
+    }
+
+    public static String getLanguages() {
+        return languages;
+    }
+
+    public static void setLanguages(String languages) {
+        Parser.languages = languages;
+    }
+
+    public static String getSearch() {
+        return search;
+    }
+
+    public static void setSearch(String search) {
+        Parser.search = search;
+    }
+
+    public static String getChat() {
+        return chat;
+    }
+
+    public static void setChat(String chat) {
+        Parser.chat = chat;
     }
 }

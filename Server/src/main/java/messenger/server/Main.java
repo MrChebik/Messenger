@@ -1,55 +1,59 @@
 /**
- * Copyright 2016 Alexander Beschasny
- *
+ * Messenger it's a program, who help you to communicate with others people who are in this program.
+ * <p>
+ * Copyright (C) 2016 MrChebik
+ * <p>
  * Messenger is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * Messenger is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU General Public License
- * along with Messenger.  If not, see <http://www.gnu.org/licenses/gpl-3.0.txt>.
- *
+ * along with Messenger.  If not, see <http://www.gnu.org/licenses/>.
+ * <p>
  * Alexander Beschasny mrchebik@yandex.ru
  */
 
 package messenger.server;
 
 import messenger.server.lang.Parser;
+import messenger.server.runnable.MessageUser;
+import messenger.server.runnable.TakeUser;
 import org.apache.log4j.Logger;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.*;
-import java.util.*;
+import java.util.HashMap;
 
 /**
- * @author mrchebik
- * @version 0.05
+ * @version 0.06
+ * @author MrChebik
  */
 public class Main {
 
     private static ServerSocket serverSocketS;
     private static ServerSocket serverSocketM;
-    private static Connection connection;
     private static int id;
 
-    private static Statement statement;
+    private static Logger logger = Logger.getLogger(Main.class.getName());
+    public static HashMap streams = new HashMap();
+    public static Socket socketM;
 
-    static Logger logger = Logger.getLogger(Main.class.getName());
-    static HashMap<Integer, PrintWriter> streams = new HashMap();
-    static Socket socketM;
-
-    Main() {
+    private Main() {
         logger.info(Parser.getLoadProperty() + "...");
         new Property(Main.class.getResourceAsStream("/config_server.properties"));
         logger.info(Parser.getConnectionToDatabasese() + "...");
-        connectToDB(Property.getHost(), Property.getLogin(), Property.getPassword());
+        new ConnectorDatabase(Property.getHost(), Property.getLogin(), Property.getPassword());
         logger.info(Parser.getCreatePorts() + "...");
         createPorts(Property.getPortLogin(), Property.getPortMessage());
         logger.info(Parser.getThreadStart() + "...");
@@ -73,22 +77,13 @@ public class Main {
         new Main();
     }
 
-    private static void connectToDB(String url, String user, String password) {
-        try {
-            connection = DriverManager.getConnection(url, user, password);
-            setStatement(connection.createStatement());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    static int signInUp(Socket socket, int error, PrintWriter printWriter) throws NullPointerException {
-        error = 0;
+    public static synchronized int signInUp(Socket socket, PrintWriter printWriter) throws NullPointerException {
+        int error = 0;
         try {
             printWriter = new PrintWriter(socket.getOutputStream(), true);
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             String fast_message = reader.readLine();
-            if (fast_message.equals("$exit$")) {
+            if (fast_message.equals("exit")) {
                 error = 5;
             } else if (fast_message.equals("signUp")) {
                 error = signUp(reader, error);
@@ -117,7 +112,8 @@ public class Main {
         }
     }
 
-    static Socket waitUser(Socket socket) {
+    public static Socket waitUser() {
+        Socket socket = null;
         try {
             socket = serverSocketS.accept();
         } catch (IOException e) {
@@ -126,7 +122,7 @@ public class Main {
         return socket;
     }
 
-    static void addOutputStream() {
+    public static void addOutputStream() {
         try {
             socketM = serverSocketM.accept();
             PrintWriter writer = new PrintWriter(socketM.getOutputStream());
@@ -136,72 +132,56 @@ public class Main {
         }
     }
 
-    static void newThreadMU() {
-        Thread t = new Thread(new CheckMessage());
-        t.start();
+    public static void newThreadMU() {
+        new Thread(new MessageUser()).start();
     }
 
-    static void newThreadTU() {
-        Thread takingThread = new TakeUser();
-        takingThread.start();
+    public static void newThreadTU() {
+        new Thread(new TakeUser()).start();
     }
 
-    static int signUp(BufferedReader reader, int error) {
-        String fast_login;
+    private static synchronized int signUp(BufferedReader reader, int error) {
         try {
-            fast_login = reader.readLine();
-            getStatement().execute("INSERT INTO `Users` (`login`, `password`) VALUES ('" + fast_login + "', '" + reader.readLine() + "');");
-            getStatement().execute("CREATE UNIQUE INDEX " + fast_login + " ON Users(login);");
+            String fast_login = reader.readLine();
+            ConnectorDatabase.getStatement().execute("INSERT INTO `Users` (`login`, `password`) VALUES ('" + fast_login + "', '" + reader.readLine() + "');");
+            ConnectorDatabase.getStatement().execute("CREATE UNIQUE INDEX " + fast_login + " ON Users(login);");
+            logger.info("> Sign Up");
         } catch (SQLException sqle) {
-            error = 1;
             if (sqle.getMessage().charAt(0) == 'D') {
-                try {
-                    getStatement().execute("DELETE FROM `Users` WHERE id=LAST_INSERT_ID();");
-                } catch (SQLException e1) {
-                    sqle.printStackTrace();
-                }
+                error = 1;
+                ConnectorDatabase.deleteLastID();
             } else {
                 sqle.printStackTrace();
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        logger.info("> Sign Up");
 
         return error;
     }
 
-    static int signIn(BufferedReader reader, int error) {
+    private static synchronized int signIn(BufferedReader reader, int error) {
         try {
             String fast_login = reader.readLine();
-            ResultSet rs = getStatement().executeQuery("SELECT * FROM `Users` WHERE `login` LIKE \"" + fast_login + "\"");
-            if (rs.first() == false) {
+            ResultSet rs = ConnectorDatabase.getStatement().executeQuery("SELECT * FROM `Users` WHERE `login` LIKE \"" + fast_login + "\"");
+            if (!rs.first()) {
                 error = 4;
             } else {
-                id = rs.getInt(1);
                 if (!rs.getString(3).equals(reader.readLine())) {
                     error = 3;
+                } else {
+                    id = rs.getInt(1);
+                    logger.info("> Sign In");
                 }
-                logger.info("> Sign In");
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (SQLException | IOException e) {
             e.printStackTrace();
         }
 
         return error;
     }
 
-    static int getStreamSize() {
+    public static int getStreamSize() {
         return streams.size();
-    }
-
-    public static Statement getStatement() {
-        return statement;
-    }
-
-    public static void setStatement(Statement statement) {
-        Main.statement = statement;
     }
 }

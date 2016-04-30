@@ -27,8 +27,12 @@
         <file>File</file>
         <help>Help</help>
         <about>About</about>
-        <version>Version: 0.04</version>
+        <version>Version: 0.06</version>
         <developer>Developer: MrChebik</developer>
         <program>Messenger</program>
+        <settings>Settings</settings>
+        <languages>Languages</languages>
+        <chat>Chat</chat>
+        <search>Search</search>
     </components>
 </client>

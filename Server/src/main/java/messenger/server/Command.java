@@ -1,5 +1,7 @@
 /**
- * Copyright 2016 Alexander Beschasny
+ * Messenger it's a program, who help you to communicate with others people who are in this program.
+ * <p>
+ * Copyright (C) 2016 MrChebik
  * <p>
  * Messenger is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -12,7 +14,7 @@
  * GNU General Public License for more details.
  * <p>
  * You should have received a copy of the GNU General Public License
- * along with Messenger.  If not, see <http://www.gnu.org/licenses/gpl-3.0.txt>.
+ * along with Messenger.  If not, see <http://www.gnu.org/licenses/>.
  * <p>
  * Alexander Beschasny mrchebik@yandex.ru
  */
@@ -24,14 +26,19 @@ import java.sql.SQLException;
 import java.util.Scanner;
 
 /**
- * @version 0.05
- * @author mrchebik
+ * @version 0.06
+ * @author MrChebik
  */
 public class Command {
 
     static void run() {
         while (true) {
-            System.out.print("[messenger.server]$ ");
+            System.out.print("\tMessenger  Copyright (C) 2016  MrChebik\n" +
+                    "\n" +
+                    "\tThis program comes with ABSOLUTELY NO WARRANTY; for details type `show w'.\n" +
+                    "\tThis is free software, and you are welcome to redistribute it\n" +
+                    "\tunder certain conditions; type `show c' for details.\n" +
+                    "[messenger.server]$ ");
             String command = new Scanner(System.in).next();
             whatInput(command);
         }
@@ -40,24 +47,28 @@ public class Command {
     private static void whatInput(String command) {
         if (command.equals("-help")) {
             help();
-        } else if (command.equals("-about")) {
+        } else if (command.equals("about")) {
             about();
-        } else if (command.equals("-v") || command.equals("-version")) {
+        } else if (command.equals("v") || command.equals("version")) {
             version();
-        } else if (command.equals("-online")) {
+        } else if (command.equals("online")) {
             online();
-        } else if (command.equals("-allUsers")) {
+        } else if (command.equals("allUsers")) {
             allUsers();
-        } else if (command.equals("-exit")) {
+        } else if (command.equals("exit")) {
             System.exit(0);
+        } else if (command.equals("show w")) {
+            warranty();
+        } else if (command.equals("show c")) {
+            redistribute();
         } else {
-            System.out.println("Команда не найдена!");
+            System.out.println("Command not found!");
         }
     }
 
     private static void allUsers() {
         try {
-            ResultSet rs = Main.getStatement().executeQuery("SELECT * FROM Users;");
+            ResultSet rs = ConnectorDatabase.getStatement().executeQuery("SELECT * FROM Users;");
             System.out.printf("%6s", "ID");
             System.out.printf("%12s", "USER");
             System.out.printf("%16s", "PASSWORD\n");
@@ -80,18 +91,31 @@ public class Command {
     }
 
     private static void about() {
-        System.out.println("Messenger.Server\n" +
+        System.out.println("Messenger.Server:\n" +
                 "Version: 0.05\n" +
                 "Developer: MrChebik\n" +
-                "License: GNU GPL\n" +
-                "Copyright: 2016 Alexander Beschasny (LICENSE in project)");
+                "License: GNU GPL v3");
     }
 
     private static void help() {
-        System.out.println("-about -- Узнать о программе\n" +
-                "-v / -version -- Версия\n" +
-                "-online -- Показывает кол-во пользователей в сети\n" +
-                "-allUsers -- Показывает всех пользователей\n" +
-                "-exit -- Выходит из программы");
+        System.out.println("-about\n" +
+                "-v, -version\n" +
+                "-o, -online\n" +
+                "-au, -allUsers\n" +
+                "-exit");
+    }
+
+    private static void warranty() {
+        System.out.println("\tThis program is distributed in the hope that it will be useful,\n" +
+                "\tbut WITHOUT ANY WARRANTY; without even the implied warranty of\n" +
+                "\tMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n" +
+                "\tGNU General Public License for more details.");
+    }
+
+    private static void redistribute() {
+        System.out.println("\tThis program is free software: you can redistribute it and/or modify\n" +
+                "\tit under the terms of the GNU General Public License as published by\n" +
+                "\tthe Free Software Foundation, either version 3 of the License, or\n" +
+                "\t(at your option) any later version.");
     }
 }

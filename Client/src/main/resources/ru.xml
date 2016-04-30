@@ -27,8 +27,12 @@
         <file>Файл</file>
         <help>Помощь</help>
         <about>О программе</about>
-        <version>Версия: 0.04</version>
+        <version>Версия: 0.06</version>
         <developer>Разработчик: MrChebik</developer>
-        <program>Чат</program>
+        <program>Мессенджер</program>
+        <settings>Настройки</settings>
+        <languages>Языки</languages>
+        <chat>Чат</chat>
+        <search>Поиск</search>
     </components>
 </client>

@@ -62,3 +62,12 @@ Server:
   Until that denote commands in Russian
 * Refactoring
 ----------------------------------------------------------------------------------------------------------------------
+v0.06
+Client:
+- Changed look of chat (BorderLayout)
+- Added the left panel
+- You can find user by its username in the Search
+- Language switch in the main window
+Server:
+- Threads come to the end (it is assumed)
+----------------------------------------------------------------------------------------------------------------------
