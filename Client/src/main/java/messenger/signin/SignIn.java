@@ -34,33 +34,47 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 /**
+ * @version 0.07
  * @author MrChebik
- * @version 0.06
  */
 public class SignIn {
 
     private static Thread t = new Thread(new checkMessageFromServer());
-    static PrintWriter writer;
+    public static PrintWriter writer;
     private static BufferedReader reader;
 
     public SignIn() {
-        Main.logger.info(Parser.getLoadProperty() + "...");
-        new Property(SignIn.class.getResourceAsStream("/config_client.properties"));
-        Main.logger.info(Parser.getCreateComponents() + "...");
-        Frame.getInstance();
-
-        Main.logger.info(Parser.getConnect() + "...");
         try {
-            Socket socket = new Socket(Property.getHost(), Property.getPort());
-            reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            writer = new PrintWriter(socket.getOutputStream(), true);
+            Property.loadFile(SignIn.class.getResourceAsStream("/config_client.properties"));
         } catch (IOException e) {
             e.printStackTrace();
-            Error.setErrorMessage(e.getMessage());
-            Frame.getInstance().dispose();
+            Main.logger.error(Parser.getProperty() + Parser.getLoadFile_err());
         }
-        Main.logger.info(Parser.getThread() + "...");
-        t.start();
+
+        Property.settingValues();
+
+        try {
+            connectionToTheServer();
+        } catch (IOException e) {
+            Main.logger.error(Parser.getProperty() + e.getMessage());
+            e.printStackTrace();
+            new Error(e.getMessage());
+        }
+
+        if (Error.getErrorMessage().equals("")) {
+            Frame.getInstance();
+
+            Main.logger.info(Parser.getThread() + "...");
+            t.start();
+        }
+    }
+
+    private static void connectionToTheServer() throws IOException {
+        Main.logger.info(Parser.getConnect() + "...");
+
+        Socket socket = new Socket(Property.getHost(), Property.getPort());
+        reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        writer = new PrintWriter(socket.getOutputStream(), true);
     }
 
     public static class checkMessageFromServer implements Runnable {
@@ -69,7 +83,7 @@ public class SignIn {
         public void run() {
             try {
                 while ((messageFromServer = reader.readLine()) != null) {
-                    if (messageFromServer.equals("2")) {
+                    if (messageFromServer.equals("0")) {
                         Frame.getInstance().dispose();
                         new Client();
                         messenger.client.frame.Frame.setLogin(Frame.getLogin());
@@ -77,11 +91,12 @@ public class SignIn {
                     } else if (messageFromServer.equals("3")) {
                         JOptionPane.showMessageDialog(null, Parser.getPassword(), Parser.getError(), JOptionPane.ERROR_MESSAGE);
                         Frame.password.setText("");
-                    } else if (messageFromServer.equals("4")) {
-                        JOptionPane.showMessageDialog(null, Parser.getNotExist(), Parser.getError(), JOptionPane.ERROR_MESSAGE);
-                        Frame.login.setText("");
                     } else {
-                        JOptionPane.showMessageDialog(null, Parser.getExistLogin(), Parser.getError(), JOptionPane.ERROR_MESSAGE);
+                        if (messageFromServer.equals("4")) {
+                            JOptionPane.showMessageDialog(null, Parser.getNotExist(), Parser.getError(), JOptionPane.ERROR_MESSAGE);
+                        } else {
+                            JOptionPane.showMessageDialog(null, Parser.getExistLogin(), Parser.getError(), JOptionPane.ERROR_MESSAGE);
+                        }
                         Frame.login.setText("");
                     }
                 }

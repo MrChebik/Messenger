@@ -51,7 +51,7 @@ public class Frame extends JFrame {
         ChatPanel.getInstance().setSize(396, 186);
         ChatPanel.getInstance().setLocation(74, 0);
 
-        Main.logger.info(Parser.getSettingFrame() + "...");
+        Main.logger.info(Parser.getSetting() + "...");
         setTitle(Parser.getProgram());
         setSize(474, 235);
         addWindowListener(new WindowAdapter() {
@@ -72,6 +72,8 @@ public class Frame extends JFrame {
     }
 
     public static void renameComponents() {
+        Main.logger.info(Parser.getFrame() + Parser.getRename());
+
         Menu.file.setText(Parser.getFile());
         Menu.settings.setText(Parser.getSettings());
         Menu.languages.setText(Parser.getLanguages());

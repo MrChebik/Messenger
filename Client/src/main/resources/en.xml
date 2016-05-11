@@ -1,25 +1,40 @@
 <client>
     <info>
-        <loadProperty>Loading property file</loadProperty>
-        <createComponents>Creating components</createComponents>
-        <settingFrame>Setting frame</settingFrame>
-        <connect>Connecting</connect>
-        <thread>Thread begin to catch message from the server</thread>
-        <exit>Exit</exit>
+        <property value="Property: ">
+            <loadFile>Loading file</loadFile>
+            <settingValues>Setting values</settingValues>
+        </property>
+        <frame value="Frame: ">
+            <createComponents>Creating components</createComponents>
+            <setting>Setting frame</setting>
+            <exit>Exit</exit>
+        </frame>
+        <server value="Server: ">
+            <connect>Connecting</connect>
+            <thread>Thread begin to catch message from the server</thread>
+            <sendInfo>Sending info about user</sendInfo>
+        </server>
+        <parser value="Parser: ">
+            <rename>Rename components</rename>
+        </parser>
     </info>
-    <error>
-        <password>Incorrect password!</password>
-        <notExist>The user with the given nickname is not registered!</notExist>
-        <existLogin>The entered login is already used!</existLogin>
-        <loadProperty>Property file not exist!</loadProperty>
+    <error value="Error: ">
+        <server>
+            <password>Incorrect password!</password>
+            <notExist>The user with the given nickname is not registered!</notExist>
+            <existLogin>The entered user is already used!</existLogin>
+        </server>
+        <frame>
+            <connect>Connection refused</connect>
+            <reason>Reasons:</reason>
+            <reason1>- no access to the Internet</reason1>
+            <reason2>- the server is offline/unavailable</reason2>
+        </frame>
         <error>Error</error>
-        <connect>Connection refused</connect>
-        <reason>Reasons:</reason>
-        <reason1>- no access to the Internet</reason1>
-        <reason2>- the server is offline/unavailable</reason2>
+        <loadFile>Property file not exist!</loadFile>
     </error>
     <components>
-        <login>Login</login>
+        <user>Login</user>
         <password>Password</password>
         <signin>Sign in</signin>
         <signup>Sign up</signup>

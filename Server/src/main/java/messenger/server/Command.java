@@ -21,6 +21,8 @@
 
 package messenger.server;
 
+import messenger.server.lang.Parser;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Scanner;
@@ -31,31 +33,29 @@ import java.util.Scanner;
  */
 public class Command {
 
-    static void run() {
+    public static void run() {
+        Main.logger.info(Parser.getConsole() + "...");
+
         while (true) {
-            System.out.print("\tMessenger  Copyright (C) 2016  MrChebik\n" +
-                    "\n" +
-                    "\tThis program comes with ABSOLUTELY NO WARRANTY; for details type `show w'.\n" +
-                    "\tThis is free software, and you are welcome to redistribute it\n" +
-                    "\tunder certain conditions; type `show c' for details.\n" +
-                    "[messenger.server]$ ");
-            String command = new Scanner(System.in).next();
-            whatInput(command);
+            System.out.print("[messenger.server]$ ");
+            whatInput(new Scanner(System.in).nextLine());
         }
     }
 
+    public static void main(String[] args) {
+        whatInput("");
+    }
+
     private static void whatInput(String command) {
-        if (command.equals("-help")) {
+        if (command.equals("--help")) {
             help();
-        } else if (command.equals("about")) {
+        } else if (command.equals("--about")) {
             about();
-        } else if (command.equals("v") || command.equals("version")) {
-            version();
-        } else if (command.equals("online")) {
+        } else if (command.equals("--online") || command.equals("-o")) {
             online();
-        } else if (command.equals("allUsers")) {
+        } else if (command.equals("--allUsers") || command.equals("-au")) {
             allUsers();
-        } else if (command.equals("exit")) {
+        } else if (command.equals("--exit")) {
             System.exit(0);
         } else if (command.equals("show w")) {
             warranty();
@@ -68,14 +68,10 @@ public class Command {
 
     private static void allUsers() {
         try {
-            ResultSet rs = ConnectorDatabase.getStatement().executeQuery("SELECT * FROM Users;");
-            System.out.printf("%6s", "ID");
-            System.out.printf("%12s", "USER");
-            System.out.printf("%16s", "PASSWORD\n");
+            ResultSet rs = ConnectorDatabase.showAllUsers();
+            System.out.printf("%6s %12s %16s", "ID", "USER", "PASSWORD\n");
             while (rs.next()) {
-                System.out.printf("%6d", rs.getInt(1));
-                System.out.printf("%12s", rs.getString(2));
-                System.out.printf("%16s", rs.getString(3) + "\n");
+                System.out.printf("%6d %12s %16s", rs.getInt(1), rs.getString(2), rs.getString(3) + "\n");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -83,26 +79,22 @@ public class Command {
     }
 
     private static void online() {
-        System.out.println("Online: " + Main.getStreamSize());
-    }
-
-    private static void version() {
-        System.out.println("Version: 0.05");
+        System.out.println("Online: " + Server.getStreamSize());
     }
 
     private static void about() {
         System.out.println("Messenger.Server:\n" +
-                "Version: 0.05\n" +
+                "Version: 0.07\n" +
                 "Developer: MrChebik\n" +
                 "License: GNU GPL v3");
     }
 
     private static void help() {
-        System.out.println("-about\n" +
-                "-v, -version\n" +
-                "-o, -online\n" +
-                "-au, -allUsers\n" +
-                "-exit");
+        System.out.println("Commands:");
+        System.out.printf("%-4s %-15s %s", "-o,", "--online", "Shows how many users online;\n");
+        System.out.printf("%-4s %-15s %s", "-au,", "--allUsers", "Shows all users from database (id, user, password);\n");
+        System.out.printf("%-20s %s", "--about", "Read about this program (name, version, developer, license);\n");
+        System.out.printf("%-20s %s", "--exit", "Exit from server.\n");
     }
 
     private static void warranty() {

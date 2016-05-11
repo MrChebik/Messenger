@@ -40,7 +40,16 @@ import java.io.IOException;
 
 public class Parser {
 
-    private static String loadProperty, createComponents, settingFrame, connect, thread, exit, password, notExist, existLogin, loadProperty_err, error, connect0, login, password0, signin, signup, send, file, help, about, version, developer, program, reason, reason1, reason2, settings, languages, chat, search;
+    private static String property, loadFile, settingValues;
+    private static String frame, createComponents, setting, exit;
+    private static String server, connect, thread, sendInfo;
+    private static String parser, rename;
+
+    private static String error, error0;
+    private static String password, notExist, existLogin, loadFile_err;
+    private static String connect0, reason, reason1, reason2;
+
+    private static String login, password0, signin, signup, send, file, help, about, version, developer, program, settings, languages, chat, search;
 
     public static String language;
 
@@ -67,34 +76,60 @@ public class Parser {
             e.printStackTrace();
         }
         doc.getDocumentElement().normalize();
-        NodeList listInfo = doc.getElementsByTagName("info");
-        Node nodeListInfo = listInfo.item(0);
-        Element eElementListInfo = (Element) nodeListInfo;
 
-        setLoadProperty(eElementListInfo.getElementsByTagName("loadProperty").item(0).getTextContent());
-        setCreateComponents(eElementListInfo.getElementsByTagName("createComponents").item(0).getTextContent());
-        setSettingFrame(eElementListInfo.getElementsByTagName("settingFrame").item(0).getTextContent());
-        setConnect(eElementListInfo.getElementsByTagName("connect").item(0).getTextContent());
-        setThread(eElementListInfo.getElementsByTagName("thread").item(0).getTextContent());
-        setExit(eElementListInfo.getElementsByTagName("exit").item(0).getTextContent());
+        NodeList listProperty = doc.getElementsByTagName("property");
+        Node nodeListProperty = listProperty.item(0);
+        Element eElementlistProperty = (Element) nodeListProperty;
+        setProperty(eElementlistProperty.getAttribute("value"));
+        setLoadFile(eElementlistProperty.getElementsByTagName("loadFile").item(0).getTextContent());
+        setSettingValues(eElementlistProperty.getElementsByTagName("settingValues").item(0).getTextContent());
+
+        NodeList listFrame = doc.getElementsByTagName("frame");
+        Node nodeListFrame = listFrame.item(0);
+        Element eElementListFrame = (Element) nodeListFrame;
+        setFrame(eElementListFrame.getAttribute("value"));
+        setCreateComponents(eElementListFrame.getElementsByTagName("createComponents").item(0).getTextContent());
+        setSetting(eElementListFrame.getElementsByTagName("setting").item(0).getTextContent());
+        setExit(eElementListFrame.getElementsByTagName("exit").item(0).getTextContent());
+
+        NodeList listServer = doc.getElementsByTagName("server");
+        Node nodeListServer = listServer.item(0);
+        Element eElementListServer = (Element) nodeListServer;
+        setServer(eElementListServer.getAttribute("value"));
+        setConnect(eElementListServer.getElementsByTagName("connect").item(0).getTextContent());
+        setThread(eElementListServer.getElementsByTagName("thread").item(0).getTextContent());
+        setSendInfo(eElementListServer.getElementsByTagName("sendInfo").item(0).getTextContent());
+
+        NodeList listParser = doc.getElementsByTagName("parser");
+        Node nodeListParser = listParser.item(0);
+        Element eElementListParser = (Element) nodeListParser;
+        setParser(eElementListParser.getAttribute("value"));
+        setRename(eElementListParser.getElementsByTagName("rename").item(0).getTextContent());
+
+        Node nodeListServer0 = listServer.item(1);
+        Element eElementListServer0 = (Element) nodeListServer0;
+        setPassword(eElementListServer0.getElementsByTagName("password").item(0).getTextContent());
+        setNotExist(eElementListServer0.getElementsByTagName("notExist").item(0).getTextContent());
+        setExistLogin(eElementListServer0.getElementsByTagName("existLogin").item(0).getTextContent());
 
         NodeList listError = doc.getElementsByTagName("error");
         Node nodeListError = listError.item(0);
         Element eElementListError = (Element) nodeListError;
-        setPassword(eElementListError.getElementsByTagName("password").item(0).getTextContent());
-        setNotExist(eElementListError.getElementsByTagName("notExist").item(0).getTextContent());
-        setExistLogin(eElementListError.getElementsByTagName("existLogin").item(0).getTextContent());
-        setLoadProperty_err(eElementListError.getElementsByTagName("loadProperty").item(0).getTextContent());
-        setError(eElementListError.getElementsByTagName("error").item(0).getTextContent());
-        setConnect0(eElementListError.getElementsByTagName("connect").item(0).getTextContent());
-        setReason(eElementListError.getElementsByTagName("reason").item(0).getTextContent());
-        setReason1(eElementListError.getElementsByTagName("reason1").item(0).getTextContent());
-        setReason2(eElementListError.getElementsByTagName("reason2").item(0).getTextContent());
+        setError(eElementListError.getAttribute("value"));
+        setError0(eElementListError.getElementsByTagName("error").item(0).getTextContent());
+        setLoadFile_err(eElementListError.getElementsByTagName("loadFile").item(0).getTextContent());
+
+        Node nodeListFrame0 = listError.item(1);
+        Element eElementListFrame0 = (Element) nodeListFrame0;
+        setConnect0(eElementListFrame0.getElementsByTagName("connect").item(0).getTextContent());
+        setReason(eElementListFrame0.getElementsByTagName("reason").item(0).getTextContent());
+        setReason1(eElementListFrame0.getElementsByTagName("reason1").item(0).getTextContent());
+        setReason2(eElementListFrame0.getElementsByTagName("reason2").item(0).getTextContent());
 
         NodeList listComponents = doc.getElementsByTagName("components");
         Node nodeListComponents = listComponents.item(0);
         Element eElementListComponents = (Element) nodeListComponents;
-        setLogin(eElementListComponents.getElementsByTagName("login").item(0).getTextContent());
+        setLogin(eElementListComponents.getElementsByTagName("user").item(0).getTextContent());
         setPassword0(eElementListComponents.getElementsByTagName("password").item(0).getTextContent());
         setSignin(eElementListComponents.getElementsByTagName("signin").item(0).getTextContent());
         setSignup(eElementListComponents.getElementsByTagName("signup").item(0).getTextContent());
@@ -111,12 +146,29 @@ public class Parser {
         setSearch(eElementListComponents.getElementsByTagName("search").item(0).getTextContent());
     }
 
-    public static String getLoadProperty() {
-        return loadProperty;
+    public static void changeLang() {
+        if (language.equals("en")) {
+            doSomething("ru");
+        } else {
+            doSomething("en");
+        }
     }
 
-    public static void setLoadProperty(String loadProperty) {
-        Parser.loadProperty = loadProperty;
+    public static void ru() {
+        doSomething("ru");
+    }
+
+    public static void en() {
+        doSomething("en");
+    }
+
+    // ------- Getters and setters -------------------->
+    public static String getLoadFile() {
+        return loadFile;
+    }
+
+    public static void setLoadFile(String loadFile) {
+        Parser.loadFile = loadFile;
     }
 
     public static String getCreateComponents() {
@@ -127,12 +179,12 @@ public class Parser {
         Parser.createComponents = createComponents;
     }
 
-    public static String getSettingFrame() {
-        return settingFrame;
+    public static String getSetting() {
+        return setting;
     }
 
-    public static void setSettingFrame(String settingFrame) {
-        Parser.settingFrame = settingFrame;
+    public static void setSetting(String setting) {
+        Parser.setting = setting;
     }
 
     public static String getConnect() {
@@ -183,12 +235,12 @@ public class Parser {
         Parser.error = error;
     }
 
-    public static String getLoadProperty_err() {
-        return loadProperty_err;
+    public static String getLoadFile_err() {
+        return loadFile_err;
     }
 
-    public static void setLoadProperty_err(String loadProperty_err) {
-        Parser.loadProperty_err = loadProperty_err;
+    public static void setLoadFile_err(String loadFile_err) {
+        Parser.loadFile_err = loadFile_err;
     }
 
     public static String getLogin() {
@@ -319,22 +371,6 @@ public class Parser {
         Parser.reason2 = reason2;
     }
 
-    public static void changeLang() {
-        if (language.equals("en")) {
-            doSomething("ru");
-        } else {
-            doSomething("en");
-        }
-    }
-
-    public static void ru() {
-        doSomething("ru");
-    }
-
-    public static void en() {
-        doSomething("en");
-    }
-
     public static String getSettings() {
         return settings;
     }
@@ -365,5 +401,69 @@ public class Parser {
 
     public static void setChat(String chat) {
         Parser.chat = chat;
+    }
+
+    public static String getProperty() {
+        return property;
+    }
+
+    public static void setProperty(String property) {
+        Parser.property = property;
+    }
+
+    public static String getFrame() {
+        return frame;
+    }
+
+    public static void setFrame(String frame) {
+        Parser.frame = frame;
+    }
+
+    public static String getServer() {
+        return server;
+    }
+
+    public static void setServer(String server) {
+        Parser.server = server;
+    }
+
+    public static String getSettingValues() {
+        return settingValues;
+    }
+
+    public static void setSettingValues(String settingValues) {
+        Parser.settingValues = settingValues;
+    }
+
+    public static String getError0() {
+        return error0;
+    }
+
+    public static void setError0(String error0) {
+        Parser.error0 = error0;
+    }
+
+    public static String getRename() {
+        return rename;
+    }
+
+    public static void setRename(String rename) {
+        Parser.rename = rename;
+    }
+
+    public static String getParser() {
+        return parser;
+    }
+
+    public static void setParser(String parser) {
+        Parser.parser = parser;
+    }
+
+    public static String getSendInfo() {
+        return sendInfo;
+    }
+
+    public static void setSendInfo(String sendInfo) {
+        Parser.sendInfo = sendInfo;
     }
 }

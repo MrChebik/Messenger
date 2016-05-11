@@ -43,10 +43,12 @@ public class Frame extends JFrame {
     static JLabel inputName, inputPassword;
 
     Timer time = new Timer(50, e -> {
-        correctUaP();
+        correctUserAndPassword();
     });
 
     private Frame() {
+        Main.logger.info(Parser.getFrame() + Parser.getCreateComponents() + "...");
+
         JButton en_ru = new JButton("en/ru");
         en_ru.setMargin(new Insets(-40, -41, -38, -40));
         en_ru.setSize(37, 16);
@@ -96,12 +98,12 @@ public class Frame extends JFrame {
         });
         add(signUp);
 
-        Main.logger.info(Parser.getSettingFrame() + "...");
+        Main.logger.info(Parser.getSetting() + "...");
+
         setTitle("Sign in");
         setSize(171, 195);
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
-                SignIn.writer.println("$exit$");
                 Main.logger.info(Parser.getExit() + "...");
                 System.exit(0);
             }
@@ -113,7 +115,7 @@ public class Frame extends JFrame {
         time.start();
     }
 
-    static void correctUaP() {
+    static void correctUserAndPassword() {
         err_login = 0;
         err_password = 0;
         if (login.getText().equals("")) {
@@ -162,23 +164,19 @@ public class Frame extends JFrame {
     }
 
     private static void renameComp() {
+        Main.logger.info(Parser.getParser() + Parser.getRename() + "...");
+
         inputName.setText(Parser.getLogin());
         inputPassword.setText(Parser.getPassword0());
         signIn.setText(Parser.getSignin());
         signUp.setText(Parser.getSignup());
     }
 
-    static void sendInfoAboutUser() {
+    public static void sendInfoAboutUser() {
+        Main.logger.info(Parser.getServer() + Parser.getSendInfo() + "...");
+
         SignIn.writer.println(Frame.getLogin());
         SignIn.writer.println(Frame.getPassword());
-    }
-
-    public static String getLogin() {
-        return login.getText();
-    }
-
-    public static String getPassword() {
-        return password.getText();
     }
 
     private static class SingletonHolder {
@@ -187,6 +185,15 @@ public class Frame extends JFrame {
 
     public static Frame getInstance() {
         return SingletonHolder.INSTANCE;
+    }
+
+    // ------- Getters and setters -------------------->
+    public static String getLogin() {
+        return login.getText();
+    }
+
+    public static String getPassword() {
+        return password.getText();
     }
 
 }

@@ -1,21 +1,40 @@
 <server>
     <info>
-        <loadProperty>Loading property file</loadProperty>
-        <connectionToDatabase>Connection to database</connectionToDatabase>
-        <createPorts>Creating ports for user login and messages</createPorts>
-        <start>The server started taking users</start>
-        <waitUser>Wait user</waitUser>
-        <create_searchFieldInDatabase>Creating/Searching user fields in the database</create_searchFieldInDatabase>
-        <addOutputStream>Add an output stream</addOutputStream>
-        <addThreadToTheUser>Creating input/output stream for message that the user</addThreadToTheUser>
-        <next>Next</next>
-        <waitNext>Wait next user</waitNext>
-        <console>The console runs</console>
-        <threadStop>The thread terminates</threadStop>
-        <threadStart>Creating thread for Sign in</threadStart>
+        <property value="Property: ">
+            <loadFile>Loading file</loadFile>
+            <settingValues>Setting values</settingValues>
+        </property>
+        <database value="MySQL: ">
+            <connect>Connect</connect>
+            <createDB>Create database</createDB>
+            <createNewUser>Create new user</createNewUser>
+            <deleteLastID>Delete last id</deleteLastID>
+            <findUser>Find user</findUser>
+            <showAllUsers>Show all users</showAllUsers>
+            <showAllUsersLogin>Show all users login</showAllUsersLogin>
+        </database>
+        <server value="Server: ">
+            <start>The server started taking users</start>
+            <createPorts>Creating ports for user user and messages</createPorts>
+            <console>The console runs</console>
+        </server>
+        <thread>
+            <takeUser value="TakeUser -> ">
+                <threadStart>Creating thread for Sign in</threadStart>
+                <waitUser>Wait user</waitUser>
+                <signInUp>Creating/Searching user fields in the database</signInUp>
+                <addOutputStream>Add an output stream</addOutputStream>
+                <addThreadMessageUser>Creating input/output stream for message that the user</addThreadMessageUser>
+                <success>Success</success>
+            </takeUser>
+        </thread>
     </info>
     <error>
-        <loadProperty>The Properties file does not exist!</loadProperty>
-        <nullPointer>The thread got null value</nullPointer>
+        <database>
+            <invalidAuthorizationConsole>Input on console or file</invalidAuthorizationConsole>
+            <invalidAuthorizationFile>Check your username and password in 'config_server.properties'
+            </invalidAuthorizationFile>
+        </database>
+        <loadFile>The Properties file does not exist!</loadFile>
     </error>
 </server>

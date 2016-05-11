@@ -22,38 +22,37 @@
 package messenger.server;
 
 import messenger.server.lang.Parser;
-import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
 /**
- * @version 0.05
+ * @version 0.07
  * @author MrChebik
  */
 public class Property {
 
-    private static String host, login, password, portLogin, portMessage;
+    private static Properties properties = new Properties();
+    private static String host, user, password, portSign, portMessage;
 
-    static Logger logger = Logger.getLogger(Property.class.getName());
+    public static void loadFile(InputStream inputStream) throws IOException {
+        Main.logger.info(Parser.getProperty() + Parser.getLoadFile() + "...");
 
-    public Property(InputStream inputStream) {
-        Properties properties = new Properties();
-
-        try {
-            properties.load(inputStream);
-        } catch (IOException e) {
-            logger.error(Parser.getLoadProperty_err());
-        }
-
-        setHost(properties.getProperty("db.host"));
-        setLogin(properties.getProperty("db.login"));
-        setPassword(properties.getProperty("db.password"));
-        setPortLogin(properties.getProperty("p.login"));
-        setPortMessage(properties.getProperty("p.messages"));
+        properties.load(inputStream);
     }
 
+    public static void settingValues() {
+        Main.logger.info(Parser.getProperty() + Parser.getSettingValues() + "...");
+
+        setHost(properties.getProperty("db.host"));
+        setUser(properties.getProperty("db.user"));
+        setPassword(properties.getProperty("db.password"));
+        setPortSign(properties.getProperty("p.sign"));
+        setPortMessage(properties.getProperty("p.message"));
+    }
+
+    // ------- Getters and setters -------------------->
     public static String getHost() {
         return host;
     }
@@ -62,12 +61,12 @@ public class Property {
         Property.host = host;
     }
 
-    public static String getLogin() {
-        return login;
+    public static String getUser() {
+        return user;
     }
 
-    public static void setLogin(String login) {
-        Property.login = login;
+    public static void setUser(String user) {
+        Property.user = user;
     }
 
     public static String getPassword() {
@@ -78,12 +77,12 @@ public class Property {
         Property.password = password;
     }
 
-    public static String getPortLogin() {
-        return portLogin;
+    public static String getPortSign() {
+        return portSign;
     }
 
-    public static void setPortLogin(String portLogin) {
-        Property.portLogin = portLogin;
+    public static void setPortSign(String portSign) {
+        Property.portSign = portSign;
     }
 
     public static String getPortMessage() {
@@ -93,4 +92,5 @@ public class Property {
     public static void setPortMessage(String portMessage) {
         Property.portMessage = portMessage;
     }
+
 }

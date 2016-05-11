@@ -34,20 +34,23 @@ import java.util.Properties;
  */
 public class Property {
 
+    private static Properties properties = new Properties();
     private static String host, port;
 
-    Property(InputStream inputStream) {
-        Properties properties = new Properties();
-        try {
-            properties.load(inputStream);
-        } catch (IOException e) {
-            Main.logger.error(Parser.getLoadProperty_err());
-        }
+    public static void loadFile(InputStream inputStream) throws IOException {
+        Main.logger.info(Parser.getProperty() + Parser.getLoadFile() + "...");
+
+        properties.load(inputStream);
+    }
+
+    public static void settingValues() {
+        Main.logger.info(Parser.getProperty() + Parser.getSettingValues() + "...");
 
         setHost(properties.getProperty("s.host"));
         setPort(properties.getProperty("s0.port"));
     }
 
+    // ------- Getters and setters -------------------->
     public static String getHost() {
         return host;
     }

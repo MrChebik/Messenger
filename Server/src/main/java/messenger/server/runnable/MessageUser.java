@@ -23,6 +23,7 @@ package messenger.server.runnable;
 
 import messenger.server.ConnectorDatabase;
 import messenger.server.Main;
+import messenger.server.Server;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -35,18 +36,19 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * @version 0.06
+ * @version 0.07
  * @author MrChebik
  */
 public class MessageUser implements Runnable {
 
-    BufferedReader reader;
-    Socket socket = Main.socketM;
+    private static BufferedReader reader;
+    private static Socket socket = Server.socketM;
 
     public MessageUser() {
         try {
-            reader = new BufferedReader(new InputStreamReader(Main.socketM.getInputStream()));
+            reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         } catch (IOException e) {
+            Main.logger.error(e.getMessage());
             e.printStackTrace();
         }
     }
@@ -56,41 +58,41 @@ public class MessageUser implements Runnable {
         String newMessage;
         try {
             while ((newMessage = reader.readLine()) != null) {
-                Set set = Main.streams.entrySet();
+                Set set = Server.streams.entrySet();
                 Iterator iter = set.iterator();
-                if (newMessage.equals("$exit$")) {
-                    String fast_login = reader.readLine();
-                    ResultSet rs = ConnectorDatabase.getStatement().executeQuery("SELECT * FROM `Users` WHERE `login` LIKE \"" + fast_login + "\"");
-                    if (rs.next()) {
-                        while (iter.hasNext()) {
-                            Map.Entry me = (Map.Entry) iter.next();
-                            if ((int) me.getKey() == rs.getInt(1)) {
-                                iter.remove();
-                                break;
+                if (newMessage.charAt(0) == '$') {
+                    if (newMessage.equals("$exit$")) {
+                        ResultSet rs = ConnectorDatabase.findUser(reader.readLine());
+                        if (rs.next()) {
+                            while (iter.hasNext()) {
+                                Map.Entry me = (Map.Entry) iter.next();
+                                if ((int) me.getKey() == rs.getInt(1)) {
+                                    iter.remove();
+                                    break;
+                                }
                             }
                         }
-                    }
-                } else {
-                    if (newMessage.equals("$search$")) {
+                    } else if (newMessage.equals("$search$")) {
                         PrintWriter writer = new PrintWriter(socket.getOutputStream());
                         String users = "$";
-                        ResultSet rs = ConnectorDatabase.getStatement().executeQuery("SELECT `login` FROM `Users`;");
+                        ResultSet rs = ConnectorDatabase.showAllUsersLogin();
                         while (rs.next()) {
                             users += rs.getString(1) + " ";
                         }
                         writer.println(users);
                         writer.flush();
-                    } else {
-                        while (iter.hasNext()) {
-                            Map.Entry me = (Map.Entry) iter.next();
-                            PrintWriter writer = (PrintWriter) me.getValue();
-                            writer.println(newMessage);
-                            writer.flush();
-                        }
+                    }
+                } else {
+                    while (iter.hasNext()) {
+                        Map.Entry me = (Map.Entry) iter.next();
+                        PrintWriter writer = (PrintWriter) me.getValue();
+                        writer.println(newMessage);
+                        writer.flush();
                     }
                 }
             }
         } catch (Exception ex) {
+            Main.logger.error(ex.getMessage());
             ex.printStackTrace();
         }
     }

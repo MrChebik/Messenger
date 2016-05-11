@@ -34,15 +34,17 @@ import java.util.Properties;
  */
 public class Property {
 
+    private static Properties property = new Properties();
     private static String host, port, editorPane, work, format;
 
-    Property(InputStream inputStream) {
-        Properties property = new Properties();
-        try {
-            property.load(inputStream);
-        } catch (IOException e) {
-            Main.logger.error(Parser.getLoadProperty_err());
-        }
+    public static void loadFile(InputStream inputStream) throws IOException {
+        Main.logger.info(Parser.getProperty() + Parser.getLoadFile() + "...");
+
+        property.load(inputStream);
+    }
+
+    public static void settingValues() {
+        Main.logger.info(Parser.getProperty() + Parser.getSettingValues() + "...");
 
         setHost(property.getProperty("s.host"));
         setPort(property.getProperty("s1.port"));
@@ -51,6 +53,7 @@ public class Property {
         setFormat(property.getProperty("t.format"));
     }
 
+    // ------- Getters and setters -------------------->
     public static String getHost() {
         return host;
     }

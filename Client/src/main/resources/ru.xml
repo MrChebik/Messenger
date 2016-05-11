@@ -1,25 +1,40 @@
 <client>
     <info>
-        <loadProperty>Загрузка файла свойcтв</loadProperty>
-        <createComponents>Создание компонентов</createComponents>
-        <settingFrame>Настройка окна</settingFrame>
-        <connect>Подключение</connect>
-        <thread>Поток, начинает ловить сообщения от сервера</thread>
-        <exit>Выход</exit>
+        <property value="Свойство: ">
+            <loadFile>Загрузка файла свойcтв</loadFile>
+            <settingValues>Setting values</settingValues>
+        </property>
+        <frame value="Окно: ">
+            <createComponents>Создание компонентов</createComponents>
+            <setting>Настройка окна</setting>
+            <exit>Выход</exit>
+        </frame>
+        <server value="Сервер: ">
+            <connect>Подключение</connect>
+            <thread>Поток, начинает ловить сообщения от сервера</thread>
+            <sendInfo>Отправка информации о пользователе</sendInfo>
+        </server>
+        <parser value="Парсер: ">
+            <rename>Rename components</rename>
+        </parser>
     </info>
-    <error>
-        <password>Неправильно введен пароль!</password>
-        <notExist>Пользователь с данным ником не зарегистрирован!</notExist>
-        <existLogin>Введенный логин уже используется!</existLogin>
-        <loadProperty>Файл свойств не существует!</loadProperty>
-        <error>Error</error>
-        <connect>В соединении отказано</connect>
-        <reason>Причины:</reason>
-        <reason1>- нет доступа к Интернету</reason1>
-        <reason2>- сервер отключен/недоступен</reason2>
+    <error value="Ошибка: ">
+        <server>
+            <password>Неправильно введен пароль!</password>
+            <notExist>Пользователь с данным ником не зарегистрирован!</notExist>
+            <existLogin>Введенный логин уже используется!</existLogin>
+        </server>
+        <frame>
+            <connect>В соединении отказано</connect>
+            <reason>Причины:</reason>
+            <reason1>- нет доступа к Интернету</reason1>
+            <reason2>- сервер отключен/недоступен</reason2>
+        </frame>
+        <loadFile>Файл свойств не существует!</loadFile>
+        <error>Ошибка</error>
     </error>
     <components>
-        <login>Логин</login>
+        <user>Логин</user>
         <password>Пароль</password>
         <signin>Войти</signin>
         <signup>Регистрация</signup>

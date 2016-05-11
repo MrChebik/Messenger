@@ -21,49 +21,46 @@
 
 package messenger.server.runnable;
 
+import messenger.server.Main;
+import messenger.server.Server;
 import messenger.server.lang.Parser;
-import org.apache.log4j.Logger;
 
-import java.io.PrintWriter;
+import java.io.IOException;
 import java.net.Socket;
 
-import static messenger.server.Main.*;
-
 /**
- * @version 0.05
+ * @version 0.07
  * @author MrChebik
  */
 public class TakeUser implements Runnable {
 
-    private static Socket socket;
-    private static PrintWriter printWriter;
-
-    static Logger logger = Logger.getLogger(TakeUser.class.getName());
-
     @Override
     public void run() {
-        logger.info(Parser.getWaitUser() + "...");
-        socket = waitUser();
+        Socket socket = null;
+        try {
+            socket = Server.waitUser();
+        } catch (IOException e) {
+            Main.logger.error(e.getMessage());
 
-        logger.info(Parser.getThreadStart() + "...");
-        newThreadTU();
+            e.printStackTrace();
+        }
+        Server.newThreadTakeUser();
+        int error = 2;
+        while (error != 0 && error != 5) {
+            error = Server.signInUp(socket);
+        }
+        if (error != 5) {
+            try {
+                Server.addOutputStream();
+            } catch (IOException e) {
+                Main.logger.error(e.getMessage());
 
-        int errors = 0;
-
-        while (errors != 2 && errors != 5) {
-            logger.info(Parser.getCreate_searchFieldInDatabase() + "...");
-            errors = signInUp(socket, printWriter);
-            if (errors != 2 && errors != 5) {
-                errors = 0;
+                e.printStackTrace();
             }
-        }
-        if (errors != 5) {
-            logger.info(Parser.getAddOutputStream() + "...");
-            addOutputStream();
-            logger.info(Parser.getAddThreadToTheUser() + "...");
-            newThreadMU();
+            Server.newThreadMessageUser();
         }
 
-        logger.info(Parser.getThreadStop() + "...");
+        Main.logger.info(Parser.getTakeUser() + Parser.getSuccess() + "!");
     }
+
 }

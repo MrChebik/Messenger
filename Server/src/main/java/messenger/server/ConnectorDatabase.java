@@ -21,41 +21,74 @@
 
 package messenger.server;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import messenger.server.lang.Parser;
+
+import java.sql.*;
 
 /**
+ * @version 0.07
  * @author MrChebik
- * @version 0.06
  */
 public class ConnectorDatabase {
 
     private static Statement statement;
 
-    ConnectorDatabase(String url, String user, String password) {
-        try {
-            Connection connection = DriverManager.getConnection(url, user, password);
-            setStatement(connection.createStatement());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public static String createInfo = "\n" +
+            "--->\n" +
+            "Database: MySQL\n" +
+            "Commands:\n" +
+            "\tCREATE DATABASE Messenger;\n" +
+            "\tUSE Messenger;\n" +
+            "\tCREATE TABLE Users(id MEDIUMINT NOT NULL AUTO_INCREMENT, login VARCHAR(12) UNIQUE, password VARCHAR(16), PRIMARY KEY(id));\n" +
+            "--->\n" +
+            "Good luck :)";
+
+    public static void connect(String url, String user, String password) throws SQLException {
+        Main.logger.info(Parser.getDatabase() + Parser.getConnect() + "...");
+
+        Connection connection = DriverManager.getConnection(url, user, password);
+        statement = connection.createStatement();
     }
 
-    public static Statement getStatement() {
-        return statement;
+    public static void createDatabase(String user, String password) throws SQLException {
+        Main.logger.info(Parser.getDatabase() + Parser.getCreateDB() + "...");
+
+        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/?user=" + user + "&password=" + password);
+        statement = connection.createStatement();
+        statement.executeUpdate("CREATE DATABASE Messenger;");
+        statement.executeUpdate("USE Messenger;");
+        statement.executeUpdate("CREATE TABLE Users(id MEDIUMINT NOT NULL AUTO_INCREMENT, login VARCHAR(12) UNIQUE, password VARCHAR(16), PRIMARY KEY(id));");
     }
 
-    public static void setStatement(Statement statement) {
-        ConnectorDatabase.statement = statement;
+    public static void createNewUser(String login, String password) throws SQLException {
+        Main.logger.info(Parser.getDatabase() + Parser.getCreateNewUser() + "...");
+
+        ConnectorDatabase.statement.execute("INSERT INTO Users (login, password) VALUES ('" + login + "', '" + password + "');");
+        ConnectorDatabase.statement.execute("CREATE UNIQUE INDEX " + login + " ON Users(login);");
     }
 
-    public static void deleteLastID() {
-        try {
-            ConnectorDatabase.getStatement().execute("DELETE FROM `Users` WHERE id=LAST_INSERT_ID();");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public static void deleteLastID() throws SQLException {
+        Main.logger.info(Parser.getDatabase() + Parser.getDeleteLastID() + "...");
+
+        ConnectorDatabase.statement.execute("DELETE FROM Users WHERE id=LAST_INSERT_ID();");
     }
+
+    public static ResultSet findUser(String login) throws SQLException {
+        Main.logger.info(Parser.getDatabase() + Parser.getFindUser() + "...");
+
+        return ConnectorDatabase.statement.executeQuery("SELECT * FROM Users WHERE login LIKE \"" + login + "\"");
+    }
+
+    public static ResultSet showAllUsers() throws SQLException {
+        Main.logger.info(Parser.getDatabase() + Parser.getShowAllUsers() + "...");
+
+        return ConnectorDatabase.statement.executeQuery("SELECT * FROM Users;");
+    }
+
+    public static ResultSet showAllUsersLogin() throws SQLException {
+        Main.logger.info(Parser.getDatabase() + Parser.getShowAllUsersLogin() + "...");
+
+        return ConnectorDatabase.statement.executeQuery("SELECT login FROM Users;");
+    }
+
 }

@@ -49,12 +49,19 @@ public class Client {
     private static DateTimeFormatter dateTimeFormatter;
 
     public Client() {
-        Main.logger.info(Parser.getLoadProperty() + "...");
-        new Property(Client.class.getResourceAsStream("/config_client.properties"));
+        try {
+            Property.loadFile(Client.class.getResourceAsStream("/config_client.properties"));
+        } catch (IOException e) {
+            e.printStackTrace();
+            Main.logger.error(Parser.getLoadFile_err());
+        }
+
+        Property.settingValues();
 
         if (Property.getWork().equals("0")) {
             dateTimeFormatter = DateTimeFormatter.ofPattern(Property.getFormat());
         }
+
         Main.logger.info(Parser.getCreateComponents() + "...");
         Frame.getInstance();
 
@@ -65,7 +72,7 @@ public class Client {
             writer = new PrintWriter(socket.getOutputStream(), true);
         } catch (IOException e) {
             e.printStackTrace();
-            new Error().setErrorMessage(e.getMessage());
+            new Error(e.getMessage());
             Frame.getInstance().dispose();
         }
 

@@ -27,37 +27,33 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * @version 0.04
+ * @version 0.07
  * @author MrChebik
  */
 public class Error extends JFrame {
 
-    private static String errorMessage = "";
     private static JLabel aboutError = new JLabel();
     private static JLabel aboutCauses = new JLabel();
 
-    public static void setErrorMessage(String errorMessage) {
-        Error.errorMessage = errorMessage;
-        writeAboutError(errorMessage);
-        writeAboutCauses(errorMessage);
-    }
+    public Error(String errorMessage) {
+        setErrorMessage(errorMessage);
 
-    public Error() {
+        setLayout(new BorderLayout());
+
         aboutError.setBounds(13, 15, 220, 26);
         aboutError.setFont(new Font(null, Font.BOLD, 16));
         aboutError.setHorizontalAlignment(SwingConstants.CENTER);
         aboutError.setVerticalAlignment(SwingConstants.CENTER);
-        add(aboutError);
+        add(aboutError, BorderLayout.NORTH);
 
         aboutCauses.setBounds(12, 50, 220, 55);
-        add(aboutCauses);
+        add(aboutCauses, BorderLayout.SOUTH);
 
+        pack();
         setTitle(Parser.getError());
-        setSize(250, 135);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
         setLocationRelativeTo(null);
-        setLayout(null);
         setVisible(true);
     }
 
@@ -73,6 +69,16 @@ public class Error extends JFrame {
         if (errorMessage.equals("В соединении отказано")) {
             aboutCauses.setText("<html>" + Parser.getReason() + "<br>" + Parser.getReason1() + "<br>" + Parser.getReason2());
         }
+    }
+
+    // ------- Getters and setters -------------------->
+    public static void setErrorMessage(String errorMessage) {
+        writeAboutError(errorMessage);
+        writeAboutCauses(errorMessage);
+    }
+
+    public static String getErrorMessage() {
+        return aboutError.getText();
     }
 
 }
